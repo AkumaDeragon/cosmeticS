@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Akuma 化妝品精品館</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@700;900&display=swap');
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Noto Sans TC', sans-serif;
+    background: linear-gradient(135deg, #fff8f9 0%, #ffe6eb 100%);
+    color: #333;
+  }
+  header {
+    background: linear-gradient(90deg, #e91e63, #c2185b);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(233,30,99,0.5);
+  }
+  .logo {
+    font-weight: 900;
+    font-size: 2.2rem;
+    letter-spacing: 5px;
+    user-select: none;
+    cursor: default;
+    background: linear-gradient(45deg, #fff, #ffd1dc);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    position: relative;
+    padding: 4px 12px;
+    border-radius: 8px;
+    border: 2px solid rgba(255,255,255,0.3);
+  }
+  nav {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+  }
+  nav a:hover {
+    background: rgba(255,255,255,0.2);
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .cart-icon {
+    position: relative;
+    cursor: pointer;
+    padding: 8px;
+    transition: transform 0.2s ease;
+  }
+  .cart-icon:hover {
+    transform: scale(1.1);
+  }
+  .cart-icon svg {
+    width: 26px;
+    height: 26px;
+    fill: white;
+  }
+  .cart-count {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: #c2185b;
+    color: white;
+    border-radius: 50%;
+    padding: 3px 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    animation: pulse 0.5s ease;
+    border: 1px solid white;
+  }
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+  .search-box {
+    position: relative;
+    flex-grow: 1;
+    max-width: 320px;
+    margin-left: 2rem;
+  }
+  .search-box input[type="search"] {
+    width: 100%;
+    padding: 10px 40px 10px 16px;
+    border: none;
+    border-radius: 24px;
+    font-size: 1rem;
+    outline: none;
+    background: rgba(255,255,255,0.9);
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+  }
+  .search-box input[type="search"]:focus {
+    box-shadow: 0 0 10px rgba(233,30,99,0.6);
+    transform: scale(1.02);
+  }
+  .search-box svg {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    fill: #e91e63;
+  }
+  main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  .banner {
+    position: relative;
+    background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+    border-radius: 16px;
+    height: 340px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 3.5rem;
+    box-shadow: inset 0 0 0 2000px rgba(0,0,0,0.3), 0 8px 16px rgba(0,0,0,0.2);
+    margin-bottom: 3rem;
+    animation: fadeIn 1.2s ease-in;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .banner h1 {
+    font-size: 3.2rem;
+    margin: 0 0 0.6rem 0;
+    text-shadow: 0 3px 8px rgba(0,0,0,0.6);
+  }
+  .banner p {
+    font-size: 1.4rem;
+    max-width: 520px;
+    text-shadow: 0 1px 5px rgba(0,0,0,0.5);
+  }
+  .btn-primary {
+    margin-top: 1.5rem;
+    padding: 14px 32px;
+    background: linear-gradient(45deg, #e91e63, #c2185b);
+    color: white;
+    border: none;
+    font-weight: 700;
+    border-radius: 30px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(233,30,99,0.6);
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    max-width: fit-content;
+  }
+  .btn-primary:hover {
+    background: linear-gradient(45deg, #c2185b, #ad1457);
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(233,30,99,0.7);
+  }
+  .product-section {
+    margin-bottom: 4rem;
+  }
+  .product-section h2 {
+    font-weight: 900;
+    font-size: 2.2rem;
+    margin-bottom: 1.8rem;
+    color: #c2185b;
+    text-align: center;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  }
+  .products-grid, .new-products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(240px,1fr));
+    gap: 2rem;
+  }
+  .product-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    opacity: 0;
+    animation: slideIn 0.6s ease forwards;
+  }
+  .product-card:nth-child(1) { animation-delay: 0.1s; }
+  .product-card:nth-child(2) { animation-delay: 0.2s; }
+  .product-card:nth-child(3) { animation-delay: 0.3s; }
+  .product-card:nth-child(4) { animation-delay: 0.4s; }
+  @keyframes slideIn {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(201,45,104,0.4);
+  }
+  .product-img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-position: center;
+    background-size: cover;
+    transition: transform 0.5s ease;
+    border-bottom: 3px solid #e91e63;
+  }
+  .product-card:hover .product-img {
+    transform: scale(1.12);
+  }
+  .product-info {
+    padding: 1.2rem 1.4rem 1.8rem 1.4rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(180deg, #fff, #fff8f9);
+  }
+  .product-name {
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+    flex-grow: 1;
+  }
+  .product-price {
+    font-weight: 900;
+    color: #e91e63;
+    font-size: 1.3rem;
+    margin-bottom: 1.2rem;
+  }
+  .add-cart-btn {
+    background: linear-gradient(45deg, #e91e63, #c2185b);
+    border: none;
+    padding: 12px;
+    color: white;
+    font-weight: 700;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  }
+  .add-cart-btn:hover {
+    background: linear-gradient(45deg, #c2185b, #ad1457);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(233,30,99,0.5);
+  }
+  .brand-info {
+    background: linear-gradient(135deg, #fce4ec, #fff8f9);
+    border-radius: 16px;
+    padding: 2.5rem;
+    text-align: center;
+    color: #880e4f;
+    box-shadow: 0 4px 12px rgba(233,30,99,0.2);
+    margin-bottom: 4rem;
+    animation: fadeIn 1.2s ease-in;
+  }
+  .brand-info h2 {
+    margin-top: 0;
+    font-weight: 900;
+    font-size: 2.2rem;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  }
+  .brand-info p {
+    max-width: 720px;
+    margin: 1.2rem auto 0 auto;
+    font-size: 1.2rem;
+    line-height: 1.7;
+  }
+  .contact-modal, .cart-modal, .checkout-modal, .confirmation-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgba(201,45,104,0.5);
+    z-index: 1100;
+    display: none;
+    flex-direction: column;
+    animation: popIn 0.4s ease;
+    background: linear-gradient(135deg, #fff, #fff8f9);
+    border: 2px solid #e91e63;
+  }
+  @keyframes popIn {
+    from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+    to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  }
+  .contact-modal.active, .cart-modal.active, .checkout-modal.active, .confirmation-modal.active {
+    display: flex;
+  }
+  .contact-modal {
+    width: 320px;
+    padding: 1.8rem;
+  }
+  .contact-modal h3 {
+    margin: 0 0 1.2rem 0;
+    color: #e91e63;
+    font-weight: 900;
+    text-align: center;
+    font-size: 1.6rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    color: #333;
+    font-size: 0.95rem;
+    margin-bottom: 0.6rem;
+  }
+  .contact-item svg {
+    fill: #e91e63;
+    width: 22px;
+    height: 22px;
+  }
+  .contact-item a {
+    color: #e91e63;
+    text-decoration: none;
+  }
+  .contact-item a:hover {
+    text-decoration: underline;
+  }
+  .contact-close, .cart-close, .checkout-close, .confirmation-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    color: #e91e63;
+    font-weight: 900;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  .contact-close:hover, .cart-close:hover, .checkout-close:hover, .confirmation-close:hover {
+    transform: scale(1.2);
+  }
+  .cart-modal {
+    width: 380px;
+    padding: 2.2rem;
+  }
+  .cart-modal h3 {
+    margin: 0 0 1.2rem 0;
+    color: #e91e63;
+    font-weight: 900;
+    text-align: center;
+    font-size: 1.8rem;
+  }
+  .cart-modal ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+  }
+  .cart-item:last-child {
+    border-bottom: none;
+  }
+  .cart-item .quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .cart-item .quantity-btn {
+    background: #e91e63;
+    color: white;
+    border: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background 0.3s ease, transform 0.2s ease;
+  }
+  .cart-item .quantity-btn:hover {
+    background: #c2185b;
+    transform: scale(1.1);
+  }
+  .cart-item .remove-btn {
+    background: #e91e63;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+  }
+  .cart-item .remove-btn:hover {
+    background: #c2185b;
+    transform: scale(1.05);
+  }
+  .cart-total {
+    margin-top: 1.2rem;
+    font-weight: 700;
+    color: #e91e63;
+    text-align: right;
+    font-size: 1.2rem;
+  }
+  .checkout-btn {
+    background: linear-gradient(45deg, #e91e63, #c2185b);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-top: 1.2rem;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  }
+  .checkout-btn:hover {
+    background: linear-gradient(45deg, #c2185b, #ad1457);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(233,30,99,0.5);
+  }
+  .checkout-modal {
+    width: 400px;
+    padding: 2.2rem;
+  }
+  .checkout-modal h3 {
+    margin: 0 0 1.2rem 0;
+    color: #e91e63;
+    font-weight: 900;
+    text-align: center;
+    font-size: 1.8rem;
+  }
+  .checkout-modal label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.6rem;
+    display: block;
+    font-size: 1rem;
+  }
+  .checkout-modal input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e91e63;
+    border-radius: 8px;
+    font-size: 1rem;
+    margin-bottom: 1.2rem;
+    background: #fff;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .checkout-modal input:focus {
+    border-color: #c2185b;
+    box-shadow: 0 0 8px rgba(233,30,99,0.4);
+    outline: none;
+  }
+  .confirmation-modal {
+    width: 380px;
+    padding: 2.2rem;
+    text-align: center;
+  }
+  .confirmation-modal h3 {
+    margin: 0 0 1.2rem 0;
+    color: #e91e63;
+    font-weight: 900;
+    font-size: 1.8rem;
+  }
+  .confirmation-modal p {
+    font-size: 1.1rem;
+    color: #333;
+    line-height: 1.6;
+    margin: 0 0 1.5rem 0;
+  }
+  .notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(45deg, #e91e63, #c2185b);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+    z-index: 1200;
+    display: none;
+    animation: slideInRight 0.4s ease;
+    font-weight: 600;
+  }
+  .notification.active {
+    display: block;
+  }
+  @keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1050;
+    display: none;
+  }
+  .overlay.active {
+    display: block;
+  }
+  footer {
+    background: linear-gradient(90deg, #e91e63, #c2185b);
+    color: white;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    font-weight: 700;
+    font-size: 1rem;
+    box-shadow: 0 -4px 12px rgba(233,30,99,0.3);
+  }
+  footer a {
+    color: #ffd1dc;
+    text-decoration: none;
+    margin: 0 0.6rem;
+    transition: color 0.3s ease;
+  }
+  footer a:hover {
+    color: white;
+    text-decoration: underline;
+  }
+  @media(max-width: 768px){
+    .banner {
+      height: 240px;
+      padding-left: 1.8rem;
+    }
+    .banner h1 {
+      font-size: 2.4rem;
+    }
+    main {
+      margin: 1.2rem auto;
+      padding: 0 1rem;
+    }
+    .cart-modal, .contact-modal, .checkout-modal, .confirmation-modal {
+      width: 90%;
+    }
+    .logo {
+      font-size: 1.8rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo" aria-label="Akuma 化妝品 Logo">AKUMA</div>
+  <nav aria-label="主選單">
+    <a href="#" id="nav-home">首頁</a>
+    <a href="#new-products" id="nav-new">新品上市</a>
+    <a href="#hot-products" id="nav-hot">熱銷商品</a>
+    <a href="#brand-info" id="nav-brand">品牌故事</a>
+    <a href="#" id="nav-contact">聯絡我們</a>
+    <div class="cart-icon" id="cart-icon">
+      <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+      <span class="cart-count" id="cart-count">0</span>
+    </div>
+  </nav>
+  <div class="search-box">
+    <input type="search" placeholder="搜尋商品、品牌..." aria-label="搜尋商品與品牌" />
+    <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.471 6.471 0 001.48-5.34C15.06 6.2 12.87 4 10 4S4.94 6.2 4.94 9.39c0 3.19 2.19 5.39 5.06 5.39a5.22 5.22 0 003.33-1.24l.27.28v.79l4.99 5L20.49 19l-5-5zM10 14c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/></svg>
+  </div>
+</header>
+
+<main>
+  <section class="banner" role="banner" aria-label="促銷區">
+    <h1>讓你美得自然自信</h1>
+    <p>Akuma 精品化妝品，帶給你頂級呵護與專業彩妝體驗。立即探索新品，享受限時優惠！</p>
+    <button class="btn-primary" aria-label="立即選購" onclick="scrollToSection('new-products')">立即選購</button>
+  </section>
+
+  <section id="new-products" class="new-product-section" aria-label="新品上市">
+    <h2>新品上市</h2>
+    <div class="new-products-grid">
+      <article class="product-card" tabindex="0" data-id="1">
+        <div class="product-img" style="background-image:url('https://tivian.tw/wp-content/uploads/2024/07/1_2.png')" role="img" aria-label="亮澤唇彩商品圖"></div>
+        <div class="product-info">
+          <div class="product-name">亮澤唇彩</div>
+          <div class="product-price">NT$780</div>
+          <button class="add-cart-btn" aria-label="加入亮澤唇彩購物車">加入購物車</button>
+        </div>
+      </article>
+      <article class="product-card" tabindex="0" data-id="2">
+        <div class="product-img" style="background-image:url('https://i1.momoshop.com.tw/1742811956/goodsimg/0012/633/935/12633935_R_m.webp')" role="img" aria-label="自然腮紅商品圖"></div>
+        <div class="product-info">
+          <div class="product-name">自然腮紅</div>
+          <div class="product-price">NT$950</div>
+          <button class="add-cart-btn" aria-label="加入自然腮紅購物車">加入購物車</button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="hot-products" class="product-section" aria-label="熱銷商品">
+    <h2>熱銷商品</h2>
+    <div class="products-grid">
+      <article class="product-card" tabindex="0" data-id="3">
+        <div class="product-img" style="background-image:url('https://img2.momoshop.com.tw/expertimg/0005/632/333/mobile/0002.jpg?t=1659409333552')" role="img" aria-label="粉底液商品圖"></div>
+        <div class="product-info">
+          <div class="product-name">柔焦粉底液</div>
+          <div class="product-price">NT$1,280</div>
+          <button class="add-cart-btn" aria-label="加入柔焦粉底液購物車">加入購物車</button>
+        </div>
+      </article>
+      <article class="product-card" tabindex="0" data-id="4">
+        <div class="product-img" style="background-image:url('https://img.shoplineapp.com/media/image_clips/674686273e122908ae358c39/original.jpg?1732675111')" role="img" aria-label="口紅商品圖"></div>
+        <div class="product-info">
+          <div class="product-name">絲絨唇膏</div>
+          <div class="product-price">NT$850</div>
+          <button class="add-cart-btn" aria-label="加入絲絨唇膏購物車">加入購物車</button>
+        </div>
+      </article>
+      <article class="product-card" tabindex="0" data-id="5">
+        <div class="product-img" style="background-image:url('https://img.vogue.com.tw/_rs/720x720/shop/files/af6918830420df19dd843404ecb08bc9.jpg')" role="img" aria-label="眼影盤商品圖"></div>
+        <div class="product-info">
+          <div class="product-name">夢幻眼影盤</div>
+          <div class="product-price">NT$1,450</div>
+          <button class="add-cart-btn" aria-label="加入夢幻眼影盤購物車">加入購物車</button>
+        </div>
+      </article>
+      <article class="product-card" tabindex="0" data-id="6">
+        <div class="product-img" style="background-image:url('https://shop.cosmed.com.tw/SalePage/ShowImageListV2?salePageId=2511535')" role="img" aria-label="保濕乳液商品圖"></div>
+        <div class="product-info">
+          <div class="product-name">高效保濕乳液</div>
+          <div class="product-price">NT$1,100</div>
+          <button class="add-cart-btn" aria-label="加入高效保濕乳液購物車">加入購物車</button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="brand-info" class="brand-info" aria-label="品牌介紹">
+    <h2>關於Akuma</h2>
+    <p>Akuma致力於為每位愛美女性打造最適合的化妝品，融合創新科技與天然成分，帶來安全、有效且時尚的美妝體驗。無論是日常保養還是精緻妝容，我們陪伴你每一天的美麗時刻。</p>
+  </section>
+</main>
+
+<div class="overlay" id="overlay"></div>
+<div class="notification" id="notification">已加入購物車！</div>
+<div class="contact-modal" role="dialog" aria-modal="true" aria-labelledby="contact-title" tabindex="-1" id="contact-modal">
+  <button class="contact-close" aria-label="關閉聯絡視窗" id="contact-close">×</button>
+  <h3 id="contact-title">Akuma Beauty</h3>
+  <div class="contact-item" title="Instagram">
+    <svg viewBox="0 0 24 24"><path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 1.5A4.25 4.25 0 003.5 7.75v8.5A4.25 4.25 0 007.75 20.5h8.5a4.25 4.25 0 004.25-4.25v-8.5A4.25 4.25 0 0016.25 3.5h-8.5zM12 7a5 5 0 110 10 5 5 0 010-10zm0 1.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm5.25-.75a1.25 1.25 0 110 2.5 1.25 1.25 0 010-2.5z"/></svg>
+    <span>IG: <a href="https://instagram.com/akuma.deragon._" target="_blank" rel="noopener noreferrer">akuma.deragon._</a></span>
+  </div>
+  <div class="contact-item" title="Facebook">
+    <svg viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.877v-6.987h-2.54v-2.89h2.54v-2.205c0-2.507 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.463h-1.26c-1.243 0-1.63.774-1.63 1.562v1.875h2.773l-.443 2.89h-2.33v6.987C18.343 21.128 22 16.991 22 12z"/></svg>
+    <span>FB: <a href="https://facebook.com/akumaderagon" target="_blank" rel="noopener noreferrer">akumaderagon</a></span>
+  </div>
+  <div class="contact-item" title="Email">
+    <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.103 0-2 .897-2 2v12c0 1.103.897 2 2 2h16c1.104 0 2-.897 2-2V6c0-1.103-.896-2-2-2zm0 2l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/></svg>
+    <span>Email: <a href="mailto:akumaderagon@gmail.com">akumaderagon@gmail.com</a></span>
+  </div>
+  <div class="contact-item" title="電話">
+    <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.21c1.2.48 2.5.74 3.82.74a1 1 0 011 1v3.25a1 1 0 01-1 1C10.07 21.47 2.53 13.93 2.53 4a1 1 0 011-1H7a1 1 0 011 1c0 1.32.26 2.62.74 3.82a1 1 0 01-.21 1.11l-2.2 2.2z"/></svg>
+    <span>Phone: <a href="tel:0912255569">0912-255-569</a></span>
+  </div>
+</div>
+
+<div class="cart-modal" role="dialog" aria-modal="true" aria-labelledby="cart-title" tabindex="-1" id="cart-modal">
+  <button class="cart-close" aria-label="關閉購物車視窗" id="cart-close">×</button>
+  <h3 id="cart-title">購物車</h3>
+  <ul id="cart-items"></ul>
+  <div class="cart-total" id="cart-total">總計: NT$0</div>
+  <button class="checkout-btn" id="checkout-btn">結帳</button>
+</div>
+
+<div class="checkout-modal" role="dialog" aria-modal="true" aria-labelledby="checkout-title" tabindex="-1" id="checkout-modal">
+  <button class="checkout-close" aria-label="關閉結帳視窗" id="checkout-close">×</button>
+  <h3 id="checkout-title">結帳</h3>
+  <div class="cart-total" id="checkout-total">總計: NT$0</div>
+  <label for="card-number">信用卡號</label>
+  <input type="text" id="card-number" placeholder="輸入16位信用卡號" maxlength="16" pattern="[0-9]{16}" required />
+  <label for="card-name">持卡人姓名</label>
+  <input type="text" id="card-name" placeholder="輸入持卡人姓名" required />
+  <label for="card-cvv">CVV碼</label>
+  <input type="text" id="card-cvv" placeholder="輸入3位CVV碼" maxlength="3" pattern="[0-9]{3}" required />
+  <button class="checkout-btn" id="confirm-checkout">確認結帳</button>
+</div>
+
+<div class="confirmation-modal" role="dialog" aria-modal="true" aria-labelledby="confirmation-title" tabindex="-1" id="confirmation-modal">
+  <button class="confirmation-close" aria-label="關閉確認視窗" id="confirmation-close">×</button>
+  <h3 id="confirmation-title">訂單已完成</h3>
+  <p>感謝您的購買！您的訂單已成功送出，我們將以最快的速度為您準備並寄出商品。請靜候我們的配送通知，預計您將在3-5個工作日內收到您的美麗新品！如有任何問題，歡迎隨時聯繫我們的客服團隊。</p>
+  <button class="checkout-btn" id="back-to-home">返回首頁</button>
+</div>
+
+<footer>
+  <div>© 2025 Akuma 化妝品精品館 | 聯絡信箱: <a href="mailto:contact@akumabeauty.com">contact@akumabeauty.com</a> | 
+    <a href="https://facebook.com/akumaderagon" target="_blank" rel="noopener noreferrer" aria-label="Facebook 社群連結">Facebook</a> | 
+    <a href="https://instagram.com/akuma.deragon._" target="_blank" rel="noopener noreferrer" aria-label="Instagram 社群連結">Instagram</a>
+  </div>
+</footer>
+
+<script>
+  // 購物車功能
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+  function updateCart() {
+    const cartItems = document.getElementById('cart-items');
+    const cartCount = document.getElementById('cart-count');
+    const cartTotal = document.getElementById('cart-total');
+    const checkoutTotal = document.getElementById('checkout-total');
+    cartItems.innerHTML = '';
+    if (cart.length === 0) {
+      cartItems.innerHTML = '<li>購物車是空的</li>';
+      cartTotal.textContent = '總計: NT$0';
+      checkoutTotal.textContent = '總計: NT$0';
+    } else {
+      cart.forEach(item => {
+        const li = document.createElement('li');
+        li.className = 'cart-item';
+        li.innerHTML = `
+          ${item.name} - NT$${item.price.toLocaleString()} × ${item.quantity}
+          <div class="quantity-controls">
+            <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
+            <span>${item.quantity}</span>
+            <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+            <button class="remove-btn" onclick="removeFromCart(${item.id})">移除</button>
+          </div>
+        `;
+        cartItems.appendChild(li);
+      });
+      const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      cartTotal.textContent = `總計: NT$${total.toLocaleString()}`;
+      checkoutTotal.textContent = `總計: NT$${total.toLocaleString()}`;
+    }
+    cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }
+
+  function addToCart(id, name, price) {
+    const existingItem = cart.find(item => item.id === id);
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      cart.push({ id, name, price, quantity: 1 });
+    }
+    updateCart();
+    showNotification();
+  }
+
+  function updateQuantity(id, change) {
+    const item = cart.find(item => item.id === id);
+    if (item) {
+      item.quantity = Math.max(1, item.quantity + change);
+      updateCart();
+    }
+  }
+
+  function removeFromCart(id) {
+    cart = cart.filter(item => item.id !== id);
+    updateCart();
+  }
+
+  function showNotification() {
+    const notification = document.getElementById('notification');
+    notification.classList.add('active');
+    setTimeout(() => {
+      notification.classList.remove('active');
+    }, 2000);
+  }
+
+  function openCheckout() {
+    if (cart.length === 0) {
+      alert('購物車是空的，無法結帳！');
+      return;
+    }
+    updateCart();
+    document.getElementById('checkout-modal').classList.add('active');
+    document.getElementById('overlay').classList.add('active');
+    document.getElementById('checkout-modal').focus();
+  }
+
+  function confirmCheckout() {
+    const cardNumber = document.getElementById('card-number').value;
+    const cardName = document.getElementById('card-name').value.trim();
+    const cardCvv = document.getElementById('card-cvv').value;
+    if (!/^\d{16}$/.test(cardNumber)) {
+      alert('請重新輸入卡號（需為16位數字）！');
+      return;
+    }
+    if (!/^[a-zA-Z\s]{2,50}$/.test(cardName)) {
+      alert('請輸入有效姓名（僅限字母與空格，2-50字）！');
+      return;
+    }
+    if (!/^\d{3}$/.test(cardCvv)) {
+      alert('請輸入有效CVV（需為3位數字）！');
+      return;
+    }
+    document.getElementById('checkout-modal').classList.remove('active');
+    document.getElementById('confirmation-modal').classList.add('active');
+    document.getElementById('confirmation-modal').focus();
+    cart = [];
+    updateCart();
+  }
+
+  document.querySelectorAll('.add-cart-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const card = e.target.closest('.product-card');
+      const id = parseInt(card.dataset.id);
+      const name = card.querySelector('.product-name').textContent;
+      const price = parseInt(card.querySelector('.product-price').textContent.replace('NT$', '').replace(',', ''));
+      addToCart(id, name, price);
+    });
+  });
+
+  const cartIcon = document.getElementById('cart-icon');
+  const cartModal = document.getElementById('cart-modal');
+  const cartClose = document.getElementById('cart-close');
+  const checkoutBtn = document.getElementById('checkout-btn');
+  const checkoutModal = document.getElementById('checkout-modal');
+  const checkoutClose = document.getElementById('checkout-close');
+  const confirmCheckoutBtn = document.getElementById('confirm-checkout');
+  const confirmationModal = document.getElementById('confirmation-modal');
+  const confirmationClose = document.getElementById('confirmation-close');
+  const backToHomeBtn = document.getElementById('back-to-home');
+
+  cartIcon.addEventListener('click', () => {
+    updateCart();
+    cartModal.classList.add('active');
+    document.getElementById('overlay').classList.add('active');
+    cartModal.focus();
+  });
+
+  cartClose.addEventListener('click', () => {
+    cartModal.classList.remove('active');
+    document.getElementById('overlay').classList.remove('active');
+  });
+
+  checkoutBtn.addEventListener('click', openCheckout);
+
+  checkoutClose.addEventListener('click', () => {
+    checkoutModal.classList.remove('active');
+    document.getElementById('overlay').classList.remove('active');
+  });
+
+  confirmCheckoutBtn.addEventListener('click', confirmCheckout);
+
+  confirmationClose.addEventListener('click', () => {
+    confirmationModal.classList.remove('active');
+    document.getElementById('overlay').classList.remove('active');
+  });
+
+  backToHomeBtn.addEventListener('click', () => {
+    confirmationModal.classList.remove('active');
+    document.getElementById('overlay').classList.remove('active');
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  });
+
+  // 滾動到區塊
+  function scrollToSection(id){
+    const el = document.getElementById(id);
+    if(el) el.scrollIntoView({behavior: 'smooth'});
+  }
+
+  // 點首頁回頂部
+  document.getElementById('nav-home').addEventListener('click', e => {
+    e.preventDefault();
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  });
+
+  // 聯絡我們彈窗
+  const contactBtn = document.getElementById('nav-contact');
+  const contactModal = document.getElementById('contact-modal');
+  const overlay = document.getElementById('overlay');
+  const contactClose = document.getElementById('contact-close');
+
+  function openContact(){
+    contactModal.classList.add('active');
+    overlay.classList.add('active');
+    contactModal.focus();
+  }
+  function closeContact(){
+    contactModal.classList.remove('active');
+    overlay.classList.remove('active');
+  }
+
+  contactBtn.addEventListener('click', e => {
+    e.preventDefault();
+    openContact();
+  });
+  contactClose.addEventListener('click', closeContact);
+  overlay.addEventListener('click', closeContact);
+
+  // 初始化購物車
+  updateCart();
+</script>
+
+</body>
+</html>
